@@ -1,0 +1,6 @@
+
+%h1 Civic Pulse: Organizations
+
+.organization.col-md-8{"ng-repeat"=>"org in organizations"}
+  .h2 {{org.name}}
+  %a{'href'=>'{{org.website}}'} {{org.website}}
