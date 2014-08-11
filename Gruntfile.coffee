@@ -33,7 +33,7 @@ module.exports = (grunt) ->
         tasks: ["wiredep"]
 
        haml:
-        files: ['<%= yeoman.app %>/{,*/}*.haml']
+        files: ['<%= yeoman.app %>/{,*/}*.{haml,html}']
         tasks: ['haml:dist']
 
       coffee:
@@ -55,7 +55,7 @@ module.exports = (grunt) ->
         ]
 
       gruntfile:
-        files: ["Gruntfile.js"]
+        files: ["Gruntfile.coffee"]
 
       livereload:
         options:
@@ -63,7 +63,7 @@ module.exports = (grunt) ->
 
         files: [
           "<%= yeoman.app %>/{,*/}*.haml"
-          ".tmp/styles/{,*/}*.scss"
+          ".tmp/styles/{,*/}*.css"
           ".tmp/scripts/{,*/}*.js"
           "<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}"
         ]
@@ -369,6 +369,12 @@ module.exports = (grunt) ->
           }
           {
             expand: true
+            cwd: ".tmp/views"
+            dest: "<%= yeoman.dist %>/views"
+            src: ["*"]
+          }
+          {
+            expand: true
             cwd: "."
             src: "bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*"
             dest: "<%= yeoman.dist %>"
@@ -395,9 +401,10 @@ module.exports = (grunt) ->
         "compass"
       ]
       dist: [
+        'haml:dist'
         "coffee"
         "compass:dist"
-        "imagemin"
+        # "imagemin"
         "svgmin"
       ]
 
@@ -448,7 +455,7 @@ module.exports = (grunt) ->
     "cdnify"
     "cssmin"
     "uglify"
-    "filerev"
+    # "filerev"
     "usemin"
     "htmlmin"
   ]

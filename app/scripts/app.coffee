@@ -1,6 +1,7 @@
 'use strict'
 
 CIVIC_API_URL = 'http://www.codeforamerica.org/api'
+CIVIC_API_URL = 'http://civicapi.herokuapp.com/api'
 
 ###*
  # @ngdoc overview
@@ -17,7 +18,9 @@ app = angular.module('civicpulseApp', [
   'ngRoute',
   'ngSanitize',
   'ngTouch',
-  'restangular'
+  'restangular',
+  'angularMoment',
+  'angular-loading-bar'
 ])
 
 
@@ -31,7 +34,10 @@ app.config ['$httpProvider', 'RestangularProvider', ($httpProvider, RestangularP
 app.config ($routeProvider, RestangularProvider) ->
   $routeProvider
     .when '/',
-      templateUrl: 'views/main.html'
+      templateUrl: 'views/activity.html'
+      controller: 'ActivityController'
+    .when '/activity',
+      templateUrl: 'views/activity.html'
       controller: 'ActivityController'
     .when '/about',
       templateUrl: 'views/about.html'

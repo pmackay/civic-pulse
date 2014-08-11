@@ -1,6 +1,35 @@
 
-%h1 Civic Pulse: Organizations
+%h1 Organizations
 
-.organization.col-md-8{"ng-repeat"=>"org in organizations"}
-  .h2 {{org.name}}
-  %a{'href'=>'{{org.website}}'} {{org.website}}
+.container
+  .row
+    .col-md-2
+      %h2.data.bold-xlarge {{ organizations.length }}
+      .data.bold-small government organizations on GitHub
+
+    .organization.col-md-10
+      .div{"ng-repeat"=>"org in organizations"}
+        %h2 {{org.name}}
+        %a{'href'=>'{{org.website}}'} {{org.website}}
+
+        %h4 Current projects
+        %table.table.table-striped
+          %tr
+            %td name
+            %td description
+            %td.last_updated updated
+            %td.issues
+              %i.fa.fa-exclamation-circle
+            %td.forks
+              %i.fa.fa-code-fork
+            %td.watchers
+              %i.fa.fa-eye
+          %tr{"ng-repeat"=>"project in org.current_projects"}
+            %td.name
+              %a{'href'=>'{{project.code_url}}'} {{ project.name }}
+            %td.description {{ project.description }}
+            %td.last_updated{'am-time-ago'=>'{{project.last_updated}}',' am-preprocess'=>'unix'}
+            %td {{ project.github_details.open_issues }}
+            %td {{ project.github_details.forks_count }}
+            %td {{ project.github_details.watchers_count }}
+

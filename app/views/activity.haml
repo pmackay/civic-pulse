@@ -1,0 +1,66 @@
+
+%h1 Activity
+
+.container
+  .col-md-2
+
+    %h2.data.bold-xlarge {{ projects.length }}
+    .data.bold-small recently active projects
+    %h2.data.bold-xlarge {{ projectsTotal }}
+    .data.bold-small projects in total
+
+    %hr
+    %b Quick text filter
+    %input{'ng-model'=>"query"}
+
+    %hr
+    %b Filter by new project
+    .checkbox
+      %label
+        %input{'type'=>'checkbox', 'ng-model'=>'newProjectsValue'}
+        New projects created in the last month
+
+    %hr
+    %b Filter by language
+    %ul
+      %li{"ng-repeat"=>"(name, total) in languages"}
+        %a{'href'=>'', 'ng-click'=>'languageFilterSelected(name)'} {{ name }}
+        ({{ total }})
+
+    %hr
+    %b
+      %a{'href'=>'', 'ng-click'=>'resetFilters()'} Reset filters
+
+  .col-md-10
+    %table.table.table-striped
+      %tr
+        %td name
+        %td organization
+        %td description
+        / %td categories
+        %td updated
+        %td language
+        %td.issues
+          %i.fa.fa-exclamation-circle
+        %td.forks
+          %i.fa.fa-code-fork
+        %td.watchers
+          %i.fa.fa-eye
+        / %td
+      %tr.project{"ng-repeat"=>"project in projects | filter:query", 'ng-hide'=>'getProjectVisibility(project)'}
+        %td
+          %a{'href'=>'{{ project.github_details.html_url }}', 'ng-if'=>"project.github_details.html_url != ''"}
+            %h4 {{ project.name }}
+          %h4{'ng-if'=>"project.github_details.html_url == ''"} {{ project.name }}
+          .recent{'ng-show'=>'project.is_recent'} New project!
+        %td.categories
+          %a{'href'=>'{{project.github_details.owner.html_url}}'} {{ project.organization_name }}
+        %td {{ project.description }}
+        / %td.categories {{ project.categories }}
+        %td.last_updated
+          %div{'am-time-ago'=>'{{project.last_updated}}',' am-preprocess'=>'unix'}
+        %td {{ project.github_details.language }}
+        %td {{ project.github_details.open_issues }}
+        %td {{ project.github_details.forks_count }}
+        %td {{ project.github_details.watchers_count }}
+
