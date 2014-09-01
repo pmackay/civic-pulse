@@ -21,6 +21,7 @@ app = angular.module('civicpulseApp', [
   'restangular',
   'angularMoment',
   'angular-loading-bar'
+  'infinite-scroll'
 ])
 
 

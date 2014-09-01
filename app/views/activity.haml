@@ -4,10 +4,15 @@
 .container
   .col-md-2
 
-    %h2.data.bold-xlarge {{ projects.length }}
-    .data.bold-small recently active projects
-    %h2.data.bold-xlarge {{ projectsTotal }}
-    .data.bold-small projects in total
+    / %h2.data.bold-xlarge {{ projects.length }}
+    .div{"ng-if"=>"civicService.projects.length > 0"}
+      %h2.data.bold-xlarge {{ civicService.projectsTotal }}
+      .data.bold-small total projects
+      .data.bold-small ({{ civicService.projects.length }} displayed)
+
+    %hr
+    %b
+      %a{'href'=>'', 'ng-click'=>'resetFilters()'} Reset filters
 
     %hr
     %b Quick text filter
@@ -23,15 +28,11 @@
     %hr
     %b Filter by language
     %ul
-      %li{"ng-repeat"=>"(name, total) in languages"}
+      %li{"ng-repeat"=>"(name, total) in civicService.languages | filter: {name: languageFilter}"}
         %a{'href'=>'', 'ng-click'=>'languageFilterSelected(name)'} {{ name }}
         ({{ total }})
 
-    %hr
-    %b
-      %a{'href'=>'', 'ng-click'=>'resetFilters()'} Reset filters
-
-  .col-md-10
+  .col-md-10{"infinite-scroll"=>"paginateProjects()", "infinite-scroll-distance"=>"0"}
     %table.table.table-striped
       %tr
         %td name
@@ -44,16 +45,19 @@
           %i.fa.fa-exclamation-circle
         %td.forks
           %i.fa.fa-code-fork
-        %td.watchers
-          %i.fa.fa-eye
-        / %td
-      %tr.project{"ng-repeat"=>"project in projects | filter:query", 'ng-hide'=>'getProjectVisibility(project)'}
+        / %td.watchers
+        / %i.fa.fa-eye
+        %td.stargazers
+          %i.fa.fa-star
+
+      %tr.project{"ng-repeat"=>"project in civicService.projects | filter:query", 'ng-hide'=>'getProjectVisibility(project)'}
         %td
           %a{'href'=>'{{ project.github_details.html_url }}', 'ng-if'=>"project.github_details.html_url != ''"}
             %h4 {{ project.name }}
           %h4{'ng-if'=>"project.github_details.html_url == ''"} {{ project.name }}
           .recent{'ng-show'=>'project.is_recent'} New project!
         %td.categories
+          / %a{'href'=>'{{project.github_details.owner.html_url}}'} {{ project.organization_name }}
           %a{'href'=>'{{project.github_details.owner.html_url}}'} {{ project.organization_name }}
         %td {{ project.description }}
         / %td.categories {{ project.categories }}
@@ -62,5 +66,6 @@
         %td {{ project.github_details.language }}
         %td {{ project.github_details.open_issues }}
         %td {{ project.github_details.forks_count }}
-        %td {{ project.github_details.watchers_count }}
+        / %td {{ project.github_details.watchers_count }}
+        %td {{ project.github_details.stargazers_count }}
 
